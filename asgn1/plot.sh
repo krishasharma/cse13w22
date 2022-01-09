@@ -22,6 +22,3 @@ gnuplot <<END
     set zeroaxis
     plot "/tmp/length.dat" with points title ""
 END 
-
-
-
