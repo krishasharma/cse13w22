@@ -9,7 +9,7 @@ done
 
 
 # maximum collatz sequence value for loop 
-rm -f /tmp/maxium.dat
+rm -f /tmp/maximum.dat
 for n in {1..10000}; do
 	echo -n $n \ >> /tmp/maximum.dat 
 	./collatz -n $n | sort -n | tail -n 1 >> /tmp/maximum.dat
