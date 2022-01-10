@@ -7,6 +7,8 @@ for n in {1..10000}; do
 	./collatz -n $n | wc -l >> /tmp/length.dat
 done 
 
+rm -f /tmp/maxium.dat
+
 for n in {1..10000}; do
 	echo -n $n \ >> /tmp/maximum.dat 
 	./collatz -n $n | sort -n | tail -n 1 >> /tmp/maximum.dat
@@ -30,6 +32,6 @@ gnuplot <<END
    set title "Maximum Collatz Sequence Value"
    set xlabel "n"
    set ylabel "value"
-   set zeroaxis 
+   set yrange [0:100000] 
    plot "/tmp/maximum.dat" with dots title ""
 END
