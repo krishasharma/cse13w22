@@ -1,3 +1,6 @@
+#Krisha Sharma
+#asgn1 CSE13 Long Winter 2022 
+
 #i!/bin/bash
 
 # collatz sequence lengths for loop
