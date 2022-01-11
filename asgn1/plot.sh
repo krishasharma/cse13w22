@@ -33,8 +33,8 @@ gnuplot <<END
    set terminal pdf 
    set output "length.pdf"
    set title "Collatz Sequence Lengths"
-   set xlabel "x"
-   set ylabel "y"
+   set xlabel "n"
+   set ylabel "length"
    set zeroaxis
    plot "/tmp/length.dat" with dots title ""
 END
