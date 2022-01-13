@@ -6,3 +6,5 @@
 ## Build 
 	clang -Wall -Wextra -Werror -Wpedantic -o collatz collatz.c
 
+## Running 
+	./plot.sh
