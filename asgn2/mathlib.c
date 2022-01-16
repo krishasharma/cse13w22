@@ -4,26 +4,18 @@
 
 #define EPSILON 1e-14 
 
-//modulus function 
-double Modulus(double x) {
-        double n;
-        double m;
-        return n - m * (int) (n / m);
-}
-
-
 //exponent function
 double Exp(double x) {
         double trm = 1.0;
-        double trm = sum;
+        double sum = trm;
         double k = 1;
         while (trm > EPSILON) {
                 trm *= Abs(x) / k;
                 sum += trm;
                 k += 1;
         }
+	return sum; 	
 }
-
 
 //sin function
 double Sin(double x) {
@@ -40,7 +32,21 @@ double Sin(double x) {
         return v;
 }
 
-
+//cos function 
+double Cos(double x) {
+        double sum = 0.0;
+        double value = x;
+        double term = x;
+        double k = 2.0;
+        while (Abs(term) > EPSILON) {
+                term = term * (x * x) / ((k - 1) * k);
+                sum = -sum;
+                value += sum * term;
+                k += 2.0;
+        }
+        return value;
+}
+/*
 //square root function
 double Sqrt(double x) {
         double z = 0.0;
@@ -52,7 +58,6 @@ double Sqrt(double x) {
         return y;
 }
 
-
 //log function
 double Log(double x) {
         double y = 1.0;
@@ -63,5 +68,4 @@ double Log(double x) {
         }
         return y;
 }
-
-
+*/
