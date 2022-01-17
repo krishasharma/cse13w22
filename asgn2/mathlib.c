@@ -35,7 +35,7 @@ double Sin(double x) {
 //cos function 
 double Cos(double x) {
         double sum = 0.0;
-        double value = x;
+        double value = 1.0;
         double term = x;
         double k = 2.0;
         while (Abs(term) > EPSILON) {
@@ -46,7 +46,7 @@ double Cos(double x) {
         }
         return value;
 }
-/*
+
 //square root function
 double Sqrt(double x) {
         double z = 0.0;
@@ -68,4 +68,4 @@ double Log(double x) {
         }
         return y;
 }
-*/
+
