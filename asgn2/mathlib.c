@@ -51,7 +51,7 @@ double Cos(double x) {
 double Sqrt(double x) {
     double z = 0.0;
     double y = 1.0;
-    double f = 1.0; // f is the offset that is multplied with the y at the end 
+    double f = 1.0; //f is the offset that is multplied with the y at the end 
     while (x > 1) {
         x /= 4.0;
         f *= 2.0;
@@ -66,9 +66,9 @@ double Sqrt(double x) {
 //log function
 double Log(double x) {
     double y = 1.0;
-    double p = Exp(y); // first guess
-    double e = 2.7182818284590455; // euler's constant 
-    double f = 0.0; // f is the offset that is added to the y at the end 
+    double p = Exp(y); //first guess
+    double e = 2.7182818284590455; //euler's constant 
+    double f = 0.0; //f is the offset that is added to the y at the end 
     while (x > e) {
         f += 1.0;
         x /= e
