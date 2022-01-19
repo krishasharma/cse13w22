@@ -35,7 +35,7 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
     bool i_p = false;
     bool i_q = false;
     int low = 0;
-    int high = 1;
+    int high = 10000;
     int partition = 100;
     while ((opt = getopt(argc, argv, "a:b:c:d:e:f:g:h:i:j:n:p:q:H")) != -1) {
         switch (opt) {
@@ -89,8 +89,8 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
 	}
     }
     if (i_a) {
-        printf("sqrt(1 - x^4)");
 	integrate(a, low, high, partition);
+	printf("sqrt(1 - x^4)");
     }  	
 
     if (i_b) {
