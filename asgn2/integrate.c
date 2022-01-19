@@ -32,12 +32,10 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
     bool i_i = false;
     bool i_j = false;
     bool i_n = false;
-    bool i_p = false;
-    bool i_q = false;
-    int low = 0;
-    int high = 10000;
+    double low  = 0;   
+    double high = 10000; 
     int partition = 100;
-    while ((opt = getopt(argc, argv, "a:b:c:d:e:f:g:h:i:j:n:p:q:H")) != -1) {
+    while ((opt = getopt(argc, argv, "abcdefghijn:p:q:H")) != -1) {
         switch (opt) {
 	case 'a':
             i_a = true;
@@ -69,17 +67,15 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
 	case 'j': 
 	    i_j = true;
 	    break;
-	case 'n': // partitions
+	case 'n': // partition
 	    i_n = true; 
 	    partition = atoi(optarg);
 	    break;
 	case 'p': // low
-	    i_p = true; 
-            low = atoi(optarg); 
+            low = strtod(optarg, NULL); 
 	    break;
 	case 'q': // high
-	    i_q = true; 
-	    high = atoi(optarg); 
+	    high = strtod(optarg, NULL); 
 	    break; 
 	case 'H': // program usage and synopsis
 	    break;
@@ -88,54 +84,174 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
 	    return 1;
 	}
     }
+
     if (i_a) {
-	integrate(a, low, high, partition);
-	printf("sqrt(1 - x^4)");
+	int count = 2;
+	printf("sqrt(1 - x^4) ,%f,%f,%d\n", low, high, partition);
+	while (partition > count) {  
+	    if (partition >= count) {
+	        printf("%d,%.15lf\n",count,integrate(a, low, high, count));
+                count += 2;
+	    }
+	    if (partition == count) {
+	        printf("%d,%.15lf\n",count,integrate(a, low, high, count));
+		break;
+	    }
+	}
     }  	
 
     if (i_b) {
-        printf("1/log(x)");
-        integrate(b, low, high, partition);
+        int count = 2;
+        printf("1/log(x) ,%f,%f,%d\n", low, high, partition);
+        while (partition > count) {
+            if (partition >= count) {
+                printf("%d,%.15lf\n",count,integrate(b, low, high, count));
+                count += 2;
+            }
+            if (partition == count) {
+                printf("%d,%.15lf\n",count,integrate(b, low, high, count));
+                break;
+            }
+        }
+
+        //printf("1/log(x) ,%f,%f,%d\n", low, high, partition);
+        //printf("%.15lf\n",integrate(b, low, high, partition));
     } 
 
     if (i_c) {
-        printf("e^(-x^2)");
-        integrate(c, low, high, partition);
+        int count = 2;
+        printf("e^(-x^2) ,%f,%f,%d\n", low, high, partition);
+        while (partition > count) {
+            if (partition >= count) {
+                printf("%d,%.15lf\n",count,integrate(c, low, high, count));
+                count += 2;
+            }
+            if (partition == count) {
+                printf("%d,%.15lf\n",count,integrate(c, low, high, count));
+                break;
+            }
+        }
+        //printf("e^(-x^2) ,%f,%f,%d\n", low, high, partition);
+        //printf("%.15lf\n",integrate(c, low, high, partition));
     }
 
     if (i_d) {
-        printf("sin(x^2)");
-        integrate(d, low, high, partition);
+	int count = 2;
+        printf("sin(x^2) ,%f,%f,%d\n", low, high, partition);
+        while (partition > count) {
+            if (partition >= count) {
+                printf("%d,%.15lf\n",count,integrate(d, low, high, count));
+                count += 2;
+            }
+            if (partition == count) {
+                printf("%d,%.15lf\n",count,integrate(d, low, high, count));
+                break;
+            }
+        }
+        //printf("sin(x^2) ,%f,%f,%d\n", low, high, partition);
+        //printf("%.15lf\n",integrate(d, low, high, partition));
     }
 
     if (i_e) {
-        printf("cos(x^2)");
-        integrate(e, low, high, partition);
+        int count = 2;
+        printf("cos(x^2) ,%f,%f,%d\n", low, high, partition);
+        while (partition > count) {
+            if (partition >= count) {
+                printf("%d,%.15lf\n",count,integrate(e, low, high, count));
+                count += 2;
+            }
+            if (partition == count) {
+                printf("%d,%.15lf\n",count,integrate(e, low, high, count));
+                break;
+            }
+        }
+        //printf("cos(x^2) ,%f,%f,%d\n", low, high, partition);
+        //printf("%.15lf\n",integrate(e, low, high, partition));
     }
 
     if (i_f) {
-        printf("log(log(x))");
-        integrate(f, low, high, partition);
+        int count = 2;
+        printf("log(log(x)) ,%f,%f,%d\n", low, high, partition);
+        while (partition > count) {
+            if (partition >= count) {
+                printf("%d,%.15lf\n",count,integrate(f, low, high, count));
+                count += 2;
+            }
+            if (partition == count) {
+                printf("%d,%.15lf\n",count,integrate(f, low, high, count));
+                break;
+            }
+        }
+        //printf("log(log(x)) ,%f,%f,%d\n", low, high, partition);
+        //printf("%.15lf\n",integrate(f, low, high, partition));
     }
 
     if (i_g) {
-        printf("sin(x)/x");
-        integrate(g, low, high, partition);
+	int count = 2;
+        printf("sin(x)/x ,%f,%f,%d\n", low, high, partition);
+        while (partition > count) {
+            if (partition >= count) {
+                printf("%d,%.15lf\n",count,integrate(g, low, high, count));
+                count += 2;
+            }
+            if (partition == count) {
+                printf("%d,%.15lf\n",count,integrate(g, low, high, count));
+                break;
+            }
+        }
+        //printf("sin(x)/x ,%f,%f,%d\n", low, high, partition);
+        //printf("%.15lf\n",integrate(g, low, high, partition));
     }
 
     if (i_h) {
-        printf("e^(-x)/x");
-        integrate(h, low, high, partition);
+	int count = 2;
+        printf("e^(-x)/x ,%f,%f,%d\n", low, high, partition);
+        while (partition > count) {
+            if (partition >= count) {
+                printf("%d,%.15lf\n",count,integrate(h, low, high, count));
+                count += 2;
+            }
+            if (partition == count) {
+                printf("%d,%.15lf\n",count,integrate(h, low, high, count));
+                break;
+            }
+        }
+        //printf("e^(-x)/x ,%f,%f,%d\n", low, high, partition);
+        //printf("%.15lf\n",integrate(h, low, high, partition));
     }
 
     if (i_i) {
-        printf("e^e^x");
-        integrate(i, low, high, partition);
+        int count = 2;
+        printf("e^e^x ,%f,%f,%d\n", low, high, partition);
+        while (partition > count) {
+            if (partition >= count) {
+                printf("%d,%.15lf\n",count,integrate(i, low, high, count));
+                count += 2;
+            }
+            if (partition == count) {
+                printf("%d,%.15lf\n",count,integrate(i, low, high, count));
+                break;
+            }
+        }
+        //printf("e^e^x ,%f,%f,%d\n", low, high, partition);
+        //printf("%.15lf\n",integrate(i, low, high, partition));
     }
 
     if (i_j) {
-        printf("sqrt(sin^2(x) + cos^2(x)");
-        integrate(j, low, high, partition);
+        int count = 2;
+        printf("sqrt(sin^2(x) + cos^2(x) ,%f,%f,%d\n", low, high, partition);
+        while (partition > count) {
+            if (partition >= count) {
+                printf("%d,%.15lf\n",count,integrate(j, low, high, count));
+                count += 2;
+            }
+            if (partition == count) {
+                printf("%d,%.15lf\n",count,integrate(j, low, high, count));
+                break;
+            }
+        }
+        //printf("sqrt(sin^2(x) + cos^2(x) ,%f,%f,%d\n", low, high, partition);
+        //printf("%.15lf\n",integrate(j, low, high, partition));
     }
     return 0;  
 }
