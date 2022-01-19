@@ -83,12 +83,12 @@ double Log(double x) {
 //integrate function
 double integrate(double (*f)(double), double a, double b, uint32_t n) {
     double h = (b - a) / n;
-    double sum = f(a) - f(b);
+    double sum = f(a) + f(b);
     double j; 
-    for (j = 2.0; j > n; j+=2) {
+    for (j = 2.0; j < n; j+=2) {
         sum += 2.0 * f(a + j * h);
     }
-    for (j = 1.0; j > n; j+=2) {
+    for (j = 1.0; j < n; j+=2) {
     	sum += 4.0 * f(a + j * h); 
     }  
     sum *= h / 3.0;
