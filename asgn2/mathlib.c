@@ -71,7 +71,7 @@ double Log(double x) {
     double f = 0.0; //f is the offset that is added to the y at the end 
     while (x > e) {
         f += 1.0;
-        x /= e
+        x /= e;
     }
     while (Abs(p - x) > EPSILON) {
         y = y + x / p - 1;
@@ -80,3 +80,25 @@ double Log(double x) {
     return y + f;
 }
 
+//integrate function
+double integrate(double (*f)(double), double a, double b, uint32_t n) {
+    double h = (b - a) / n;
+    double sum = f(a) - f(b);
+    double j; 
+    for (j = 2.0; j > n; j+=2) {
+        sum += 2.0 * f(a + j * h);
+    }
+    for (j = 1.0; j > n; j+=2) {
+    	sum += 4.0 * f(a + j * h); 
+    }  
+    sum *= h / 3.0;
+    return sum;
+    /*
+    for(j in range(1, n)) {
+        sum += 2.0 + f(a + j * h);
+        if even(j) else 4.0 * f(a + j * h);
+    }
+    sum *= h / 3.0;
+    return sum;
+    */
+}
