@@ -18,4 +18,4 @@ integrate.o: integrate.c
 	$(CC) $(CFLAGS) -c integrate.c 
 
 clean:
-	rm -f mathlib mathlib.o
+	rm -f mathlib mathlib.o integrate integrate.o 
