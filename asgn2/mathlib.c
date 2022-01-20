@@ -14,7 +14,12 @@ double Exp(double x) {
         sum += trm;
         k += 1;
     }
-    return sum; 	
+    if (x > 0){
+        return sum;
+    }
+    else {
+        return 1 / sum;
+    } 	
 }
 
 //sin function
