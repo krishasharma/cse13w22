@@ -6,18 +6,16 @@
 #include <stdbool.h> 
 
 // usage: ./main [-h] [-g] [-n count]
-// -a: prints the numerical integration of the square root of one minus x to the forth 
-// 
-
-//void i_a; 
-//void i_b; 
-//void i_c;
-//void i_d;
-//void i_f;
-//void i_g;
-//void i_h;
-//void i_i;
-//void i_j;
+// -a: prints the numerical integration of sqrt(1-x^4) 
+// -b: prints the numerical integration of 1/log(x)
+// -c: prints the numerical integration of e^(-x^2)
+// -d: prints the numerical integration of sin(x^2)
+// -e: prints the numerical integration of cos(x^2)
+// -f: prints the numerical integration of log(log(x)
+// -g: prints the numerical integration of sin(x)/x
+// -h: prints the numerical integration of e^(-x)/x
+// -i: prints the numerical integration of e^e^x
+// -j: prints the numerical integration of sqrt(sin^2(x) + cos^2(x)
 
 int main(int argc, char **argv) { // use getopt() loop to parse arguments
     int opt = 0;
@@ -32,6 +30,8 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
     bool i_i = false;
     bool i_j = false;
     bool i_n = false;
+    //bool p = false;
+    //bool q = false;
     double low  = 0;   
     double high = 10000; 
     int partition = 100;
@@ -72,9 +72,11 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
 	    partition = atoi(optarg);
 	    break;
 	case 'p': // low
+	    //p = true;
             low = strtod(optarg, NULL); 
 	    break;
 	case 'q': // high
+	    //q = true;
 	    high = strtod(optarg, NULL); 
 	    break; 
 	case 'H': // program usage and synopsis
@@ -84,7 +86,7 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
 	    return 1;
 	}
     }
-
+    
     if (i_a) {
 	int count = 2;
 	printf("sqrt(1 - x^4) ,%f,%f,%d\n", low, high, partition);
@@ -113,9 +115,6 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
                 break;
             }
         }
-
-        //printf("1/log(x) ,%f,%f,%d\n", low, high, partition);
-        //printf("%.15lf\n",integrate(b, low, high, partition));
     } 
 
     if (i_c) {
@@ -131,8 +130,6 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
                 break;
             }
         }
-        //printf("e^(-x^2) ,%f,%f,%d\n", low, high, partition);
-        //printf("%.15lf\n",integrate(c, low, high, partition));
     }
 
     if (i_d) {
@@ -148,8 +145,6 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
                 break;
             }
         }
-        //printf("sin(x^2) ,%f,%f,%d\n", low, high, partition);
-        //printf("%.15lf\n",integrate(d, low, high, partition));
     }
 
     if (i_e) {
@@ -165,8 +160,6 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
                 break;
             }
         }
-        //printf("cos(x^2) ,%f,%f,%d\n", low, high, partition);
-        //printf("%.15lf\n",integrate(e, low, high, partition));
     }
 
     if (i_f) {
@@ -182,8 +175,6 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
                 break;
             }
         }
-        //printf("log(log(x)) ,%f,%f,%d\n", low, high, partition);
-        //printf("%.15lf\n",integrate(f, low, high, partition));
     }
 
     if (i_g) {
@@ -199,8 +190,6 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
                 break;
             }
         }
-        //printf("sin(x)/x ,%f,%f,%d\n", low, high, partition);
-        //printf("%.15lf\n",integrate(g, low, high, partition));
     }
 
     if (i_h) {
@@ -216,8 +205,6 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
                 break;
             }
         }
-        //printf("e^(-x)/x ,%f,%f,%d\n", low, high, partition);
-        //printf("%.15lf\n",integrate(h, low, high, partition));
     }
 
     if (i_i) {
@@ -233,8 +220,6 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
                 break;
             }
         }
-        //printf("e^e^x ,%f,%f,%d\n", low, high, partition);
-        //printf("%.15lf\n",integrate(i, low, high, partition));
     }
 
     if (i_j) {
@@ -250,8 +235,6 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
                 break;
             }
         }
-        //printf("sqrt(sin^2(x) + cos^2(x) ,%f,%f,%d\n", low, high, partition);
-        //printf("%.15lf\n",integrate(j, low, high, partition));
     }
     return 0;  
 }
