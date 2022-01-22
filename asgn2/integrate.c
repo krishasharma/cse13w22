@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <stdbool.h> 
 
-// usage: ./main [-h] [-g] [-n count]
+// usage: ./integrate [-h] [-g] [-n count]
 // -a: prints the numerical integration of sqrt(1-x^4) 
 // -b: prints the numerical integration of 1/log(x)
 // -c: prints the numerical integration of e^(-x^2)
@@ -16,6 +16,10 @@
 // -h: prints the numerical integration of e^(-x)/x
 // -i: prints the numerical integration of e^e^x
 // -j: prints the numerical integration of sqrt(sin^2(x) + cos^2(x)
+// -n: sets the upper limit of partitions. 
+// -p: sets the low end of the interval to integrate over to low.
+// -q: sets the high end of the interval to integrate over to high.
+// -H: displays the program's usage and synopsis.
 
 int main(int argc, char **argv) { // use getopt() loop to parse arguments
     int opt = 0;
@@ -80,6 +84,20 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
 	    high = strtod(optarg, NULL); 
 	    break; 
 	case 'H': // program usage and synopsis
+	    printf(" -a: prints the numerical integration of sqrt(1-x^4)\n");
+	    printf(" -b: prints the numerical integration of 1/log(x)\n");
+	    printf(" -c: prints the numerical integration of e^(-x^2)\n");
+	    printf(" -d: prints the numerical integration of sin(x^2)\n");
+	    printf(" -e: prints the numerical integration of cos(x^2)\n");
+	    printf(" -f: prints the numerical integration of log(log(x)\n");
+	    printf(" -g: prints the numerical integration of sin(x)/x\n");
+	    printf(" -h: prints the numerical integration of e^(-x)/x\n");
+	    printf(" -i: prints the numerical integration of e^e^x\n");
+	    printf(" -j: prints the numerical integration of sqrt(sin^2(x) + cos^2(x)\n");
+	    printf(" -n: sets the upper limit of partitions.\n");
+	    printf(" -p: sets the low end of the interval to integrate over to low.\n");
+	    printf(" -q: sets the high end of the interval to integrate over to high.\n");
+	    printf(" -H: displays the program's usage and synopsis.\n");
 	    break;
 	default:
 	    fprintf(stderr, "error\n");

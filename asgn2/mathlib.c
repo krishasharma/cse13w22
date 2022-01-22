@@ -5,6 +5,7 @@
 #define EPSILON 1e-14 
 
 //exponent function
+//the exponent function computes e^x, of some vaue x.  
 double Exp(double x) {
     double trm = 1.0;
     double sum = trm;
@@ -23,6 +24,7 @@ double Exp(double x) {
 }
 
 //sin function
+//the sin function computes sin(x).
 double Sin(double x) {
     double s = 1.0;
     double v = x;
@@ -38,6 +40,7 @@ double Sin(double x) {
 }
 
 //cos function 
+//the cos function computes cos(x).
 double Cos(double x) {
     double sum = 1.0;
     double value = 1.0;
@@ -53,6 +56,7 @@ double Cos(double x) {
 }
 
 //square root function
+//the square root function computes the square root of some value x. 
 double Sqrt(double x) {
     double z = 0.0;
     double y = 1.0;
@@ -69,6 +73,7 @@ double Sqrt(double x) {
 }
 
 //log function
+//the log function computes log(x) of some value x.
 double Log(double x) {
     double y = 1.0;
     double p = Exp(y); //first guess
@@ -86,6 +91,8 @@ double Log(double x) {
 }
 
 //integrate function
+//the integrate function links with the implelmented math library and computes the numerical 
+//integration of various functions using composite simpson's 1/3 rule. 
 double integrate(double (*f)(double), double a, double b, uint32_t n) {
     double h = (b - a) / n;
     double sum = f(a) + f(b);
