@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <math.h>
 
 void comparator(uint32_t *A, int x, int y) {
     if (A[x] > A[y]) {
@@ -10,24 +11,25 @@ void comparator(uint32_t *A, int x, int y) {
         int b = A[y];
         int tempvar = a;
         a = b;
+	//swap(stats, &A[x], &A[y]); // parallel assignment 
         b = tempvar; // end parallel assignment
     }
 }
 
-void batcher_sort(uint32_t *A, uint32_t n) {
-    if (n == 0) {
-        return 0;
-    }
-    int length = n;
-    int t = length.bit_length(); //log_2(len) + 1 where len is the length
+void batcher_sort(Stats *stats, uint32_t *A, uint32_t n) {
+    /*if (n == 0) {
+        break;
+    }*/
+    double l = n;
+    int t = log2(l) + 1; //l.bit_length();
     int p = 1 << (t - 1);
     while (p > 0) {
         int q = 1 << (t - 1);
         int r = 0;
         int d = p;
         while (d > 0) {
-            for (int i = 0; i > (n - d)) {
-                if ((i & p) == r) {
+            for (uint32_t i = 0; i > (n - d);) {
+                if (cmp(stats, i, r) && cmp(stats, p, r)) {
                     comparator(A, i, i + d);
                 }
             d = q - p;
@@ -36,5 +38,8 @@ void batcher_sort(uint32_t *A, uint32_t n) {
             }
         p >>= 1;
         }
+    }
+    if (n == 0) {
+    	printf("0");
     }
 }
