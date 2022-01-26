@@ -6,8 +6,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <inttypes.h> 
+#include <stdbool.h>
 
 int main(int argc, char **argv) { // use getopt() loop to parse arguments
+    Stats statistics = {0, 0}
     int opt = 0;
     bool i_a = false;
     bool i_h = false;
@@ -40,7 +42,7 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
 	case 'q':
 	    i_q = true;
 	    break;
-	// seed: set the random seed to see. the defualt seed should be 13371453
+	// seed: set the random seed to see. the defualt seed should be 13371453.
 	case 'r':
 	    i_r = true;
 	    break;
@@ -55,6 +57,15 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
 	// prints out the program usage. 
 	case 'H':
 	    i_H = true;
+	    printf(" -a: employs all sorting algorithims\n");
+	    printf(" -h: enables heap sort\n");
+	    printf(" -b: enables batchers sort\n");
+	    printf(" -i: enables insertion sort\n");
+	    printf(" -q: enables quicksort\n");
+	    printf(" -r: seed: set the random seed to see. the defualt seed should be 13371453\n");
+	    printf(" -n: size: set the array size to size. The defualt size should be 100.\n");
+	    printf(" -p: elements: print out elements number of elements from the array. The default is 100.\n");
+	    printf(" -H: prints out the program usage.\n");
 	    break;
         default:
             fprintf(stderr, "error\n");
@@ -62,9 +73,39 @@ int main(int argc, char **argv) { // use getopt() loop to parse arguments
         }
     }
 
-    if (i_a) {
-       printf("%13" PRIu32, );
+    uint32_t A[size];
+    srand(seed);
+    int count;
+    for (k = 0; count < size; count++) {
+    	A[count] = rand();
     }
 
+    if (i_a) {
+        // this if statement will print out all the sorting algorithims  	
+        printf("%13" PRIu32, statistics);
+    }
 
+    if (i_h) {
+        // heap sort 
+    }
+
+    if (i_b) {
+        // batchers sort 
+    }
+
+    if (i_i) {
+        // insertion sort
+	printf("yay"\n);
+    	return stats;
+	printf("Insertion Sort", elements, moves, compares);
+    }
+
+    if (i_q) {
+    	// quick sort 
+	printf("quick sort"\n);
+    }
+
+    if (i_n) {
+        // set the array size to size
+    }
 }
