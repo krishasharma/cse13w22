@@ -11,16 +11,16 @@ struct Universe {
 
 // function that creates the grid that the game is played on
 Universe *uv_create(uint32_t rows, uint32_t cols, bool toroidal) {
-    Universe *u = (Universe *) calloc(1, sizeof(Universe)); // one universe created,  gives me a pointer to allocate a  memory big enough to contain Universe
+    Universe *u = (Universe *) calloc(1, sizeof(Universe)); // one universe created,gives me a pointer to allocate a  memory big enough to contain Universe
+    //u->grid = malloc(sizeof(Universe));
     bool **grid = (bool **) calloc(rows, sizeof(bool *)); // **grid was previosuly **matrix
     for (uint32_t r = 0; r < rows; r += 1) {
-        grid[r] = (bool *) calloc(cols,
-            sizeof(bool)); // allocates a column of pointers to rows then allocate the actual rows
+        grid[r] = (bool *) calloc(cols,sizeof(bool)); // allocates a column of pointers to rows then allocate the actual rows
     }
     u->rows = rows;
     u->cols = cols;
     u->toroidal = toroidal;
-    u->grid = malloc(sizeof(*u));
+    u->grid = grid;
     return u;
 }
 
@@ -28,9 +28,12 @@ Universe *uv_create(uint32_t rows, uint32_t cols, bool toroidal) {
 void uv_delete(Universe *u) {
     for (uint32_t r = 0; r < uv_rows(u); r += 1) {
         free(u->grid[r]);
+        u->grid[r] = NULL;
     }
     free(u->grid); // first free whats inside the universe
+    u->grid = NULL;
     free(u); // then free the universe
+    u = NULL;
 }
 
 // returns the number of rows in the Universe
@@ -45,11 +48,12 @@ uint32_t uv_cols(Universe *u) {
 
 // marks cell at row r and column c as live
 void uv_live_cell(Universe *u, uint32_t r, uint32_t c) {
-    if (r >= 0 && r < uv_rows(u)) {
-        if (c > 0 && c < uv_cols(u)) {
+    u->grid[r][c] = true;
+    /*if (r < uv_rows(u)) {
+        if (c < uv_cols(u)) {
             u->grid[r][c] = true;
         }
-    }
+    }*/
 }
 
 // marks cell at row r and column c as dead
@@ -75,20 +79,22 @@ bool uv_populate(Universe *u, FILE *infile) {
     uint32_t rows;
     uint32_t cols;
     while (fscanf(infile, "%u %u\n", &rows, &cols) == 2) { // scan the rest of the lines.
-        if (rows <= uv_rows(u) && cols <= uv_cols(u)) {
-            uv_live_cell(u, rows, cols);
-            printf("cell is live : %d, %d\n", rows, cols);
-        } else {
+        if (rows < uv_rows(u) && cols < uv_cols(u)) {
+	    uv_live_cell(u, rows, cols);
+        } 
+	else {
             return false;
         }
     }
-    for (rows = 0; rows < uv_rows(u); rows++) {
-        for (cols = 0; cols < uv_cols(u); cols++) {
+    /*
+    for (rows = 0; rows < uv_rows(u); rows++) { 
+        printf("test pop b\n");
+	for (cols = 0; cols < uv_cols(u); cols++) {
             if (uv_get_cell(u, rows, cols) == false) {
                 uv_dead_cell(u, rows, cols);
             }
         }
-    }
+    }*/
     return true;
 }
 
