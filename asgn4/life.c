@@ -24,7 +24,8 @@ int main(int argc, char **argv) {
 
     FILE *in = fopen("stdin", "r");
     FILE *out = fopen("stdout", "r");
-
+    
+    printf("test\n");
     while ((opt = getopt(argc, argv, "tsn:i:o:")) != -1) {
         switch (opt) {
         // -t specify that the Game of Life is to be played on a toroidal universe.
@@ -33,7 +34,9 @@ int main(int argc, char **argv) {
             toro = true;
             break;
         // -s silences ncurses, enabling this option means that nothing should be dispalyed by ncurses.
-        case 's': l_s = true; break;
+        case 's': 
+	    l_s = true; 
+	    break;
         // -n generations, specify the number of generations that the universe goes through. the default number of generations is 0.
         case 'n':
             l_n = true;
@@ -51,47 +54,119 @@ int main(int argc, char **argv) {
             break;
         }
     }
-
+    printf("test 1\n");
     fscanf(in, "%d %d", &rows, &cols);
+    printf("test A\n");
     Universe *uniA = uv_create(rows, cols, toro);
     Universe *uniB = uv_create(rows, cols, toro);
     Universe *uniC = uv_create(rows, cols, toro);
+    printf("test B\n");
     uv_populate(uniA, in);
+    printf("test C\n");
     fclose(in);
 
+    
+   
+
+    printf("test D\n");
+    if (l_s) {
+        initscr();
+        curs_set(FALSE);
+    }
+	
+        for (uint32_t i = 0; i <= generation; i++) {
+            clear();
+            printf("test 3\n");
+            for (rows = 0; rows < uv_rows(uniA); rows++) {
+                printf("test 4\n");
+                for (cols = 0; cols < uv_cols(uniA); cols++) {
+                    printf("test 5\n");
+                    uint32_t censusval = uv_census(uniA, rows, cols);
+                    if ((uv_get_cell(uniA, rows, cols) == true) && ((censusval == 2) || (censusval == 3))) {
+                        printf("test 6\n");
+                        uv_live_cell(uniB, rows, cols);
+                        if(!l_s) {
+			    mvprintw(rows, cols, "o");
+			}
+                    }
+		    else if ((uv_get_cell(uniA, rows, cols) == false) && (censusval == 3)) {
+                        printf("test 7\n");
+                        uv_dead_cell(uniB, rows, cols);
+                        if (!l_s) {
+			     mvprintw(rows, cols, "o");
+			}
+                    } 
+		    else {
+                        printf("test 8\n");
+                        uv_dead_cell(uniB, rows, cols);
+                        if (!l_s){
+			    mvprintw(rows, cols, ".");
+			}
+                    }
+                    printf("test 9\n");
+                    uniC = uniA;
+                    uniA = uniB;
+                    uniB = uniC;
+                }
+            }
+            printf("test 10\n");
+            refresh();
+            usleep(DELAY);
+        }
+        printf("test 11\n");
+        endwin();
+        uv_print(uniA, out);
+        uv_delete(uniA);
+        uv_delete(uniB);
+        uv_delete(uniC);
+        fclose(out);   
+        return 0;    
+}
+
+    /*
     initscr();
     curs_set(FALSE);
+    
+    printf("test 2\n");
 
     for (uint32_t i = 0; i <= generation; i++) {
         clear();
+	printf("test 3\n");
         for (rows = 0; rows < uv_rows(uniA); rows++) {
+            printf("test 4\n");
             for (cols = 0; cols < uv_cols(uniA); cols++) {
+                printf("test 5\n");
                 uint32_t censusval = uv_census(uniA, rows, cols);
-                if ((uv_get_cell(uniA, rows, cols) == true)
-                    && ((censusval == 2) || (censusval == 3))) {
+                if ((uv_get_cell(uniA, rows, cols) == true) && ((censusval == 2) || (censusval == 3))) {
+                    printf("test 6\n");
                     uv_live_cell(uniB, rows, cols);
                     mvprintw(rows, cols, "o");
                 } else if ((uv_get_cell(uniA, rows, cols) == false) && (censusval == 3)) {
-                    uv_dead_cell(uniB, rows, cols);
+                    printf("test 7\n");
+		    uv_dead_cell(uniB, rows, cols);
                     mvprintw(rows, cols, "o");
                 } else {
+		    printf("test 8\n");
                     uv_dead_cell(uniB, rows, cols);
                     mvprintw(rows, cols, ".");
                 }
+		printf("test 9\n");
                 uniC = uniA;
                 uniA = uniB;
                 uniB = uniC;
             }
         }
+	printf("test 10\n");
         refresh();
         usleep(DELAY);
     }
+    printf("test 11\n");
     endwin();
     uv_print(uniA, out);
     uv_delete(uniA);
     uv_delete(uniB);
     uv_delete(uniC);
-    fclose(out);
+    fclose(out);*/
 
     // generations for loop pusedocode Audrey Ostrom tutoring session
     // three for loops both universes are the same size, A is populated, B starts empty
@@ -108,7 +183,4 @@ int main(int argc, char **argv) {
     //    usleep(DELAY);
     // }
 
-    //uint32_t v = uv_census(uniA, 0, 0);
-    //printf("%d\n", v);
-    return 0;
-}
+
