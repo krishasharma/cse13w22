@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+// Please Note: The implemented code is based off of pusedocode provided by the Professor in the assignment PDF
+// There is also high level pusedocode collabration with my sister Twisha Sharma (tvsharm)
+// The Universe Struct was provided by Professor Long in the assignment PDF 
+
 struct Universe {
     uint32_t rows;
     uint32_t cols;
@@ -26,13 +30,13 @@ Universe *uv_create(uint32_t rows, uint32_t cols, bool toroidal) {
 
 // destructor function
 void uv_delete(Universe *u) {
-    for (uint32_t r = 0; r < uv_rows(u); r += 1) {
-        free(u->grid[r]);
-        u->grid[r] = NULL;
+    for (uint32_t r = 0; r < uv_rows(u); r += 1) { // loop through all the rows 
+        free(u->grid[r]); // free all the rows 
+        u->grid[r] = NULL; // set the rows to NULL
     }
     free(u->grid); // first free whats inside the universe
-    u->grid = NULL;
-    free(u); // then free the universe
+    u->grid = NULL; // set the grid to NULL 
+    free(u); // then free the universe (u)
     u = NULL;
 }
 
