@@ -1,6 +1,8 @@
-#include <randstate.h>
+#include "randstate.h"
 #include <gmp.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 
 // randstate.c and numbtheory.c at the same time
 // rsa.c
@@ -8,10 +10,15 @@
 // encrypt.c
 // decrypt.c 
 
-struct state {
+// Please Note:
+// The below code is based off of pseudocode provided during Audrey's tutoring section on ______
+
+/*struct state {
     gmp_randstate_t state;
     uint64_t seed;
-}
+};*/
+
+gmp_randstate_t state;
 
 void randstate_init(uint64_t seed) {
     // initializes a global random state named state with a Mersenne Twister algorithm 
@@ -22,6 +29,7 @@ void randstate_init(uint64_t seed) {
     //srandom(seed);
     gmp_randinit_mt(state);
     gmp_randseed_ui(state, seed);
+    srandom(seed);
     //gmp_randinit_mt(state);
 }
 
