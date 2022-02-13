@@ -151,21 +151,21 @@ bool is_prime(mpz_t n, uint64_t iters) {
 	    while ((mpz_cmp(j, sminus) != 1) && (mpz_cmp(y, n_1) != 0)) { // while j <= s-1 & y != n - 1
 	        pow_mod(y, y, two, n);
 		if ((mpz_cmp_ui(y, 1) == 1)) {
-		    mpz_clears(n_clone, n_1, r, s, sminus);
-		    mpz_clears(a, y, j, jadd, upperrange, two);
+		    mpz_clears(n_clone, n_1, r, s, sminus, NULL);
+		    mpz_clears(a, y, j, jadd, upperrange, two, NULL);
 	            return false;
 		}
 		mpz_add_ui(jadd, j, 1);
 	    }
 	    if (mpz_cmp(y, n_1) != 0) {
-                mpz_clears(n_clone, n_1, r, s, sminus);
-		mpz_clears(a, y, j, jadd, upperrange, two);
+                mpz_clears(n_clone, n_1, r, s, sminus, NULL);
+		mpz_clears(a, y, j, jadd, upperrange, two, NULL);
 	        return false;
 	    }
 	}
     }
-    mpz_clears(n_clone, n_1, r, s, sminus);
-    mpz_clears(a, y, j, jadd, upperrange, two);
+    mpz_clears(n_clone, n_1, r, s, sminus, NULL);
+    mpz_clears(a, y, j, jadd, upperrange, two, NULL);
     return true; 
 }
 
@@ -191,7 +191,6 @@ bool is_prime(mpz_t n, uint64_t iters) {
     }
     return a;
 }*/
-
 
 void gcd( mpz_t d, mpz_t a, mpz_t b) {
     mpz_t t;
@@ -234,3 +233,4 @@ void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
     // computes the inverse i of a modulo n 
     // if there is no mod inverse, set i to zero 
 }*/
+
