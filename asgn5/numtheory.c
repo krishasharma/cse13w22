@@ -14,183 +14,131 @@
 // Omar is cited in numtheory.c for explaining how to correctly implement the mpz functions from the GMP library
 
 
-/*void pow_mod(int64_t out, int64_t base, int64_t exponent, int64_t modulus) {
-    // initalize some variables to hold the initial values given by the parameters 
-    // while loop (while d > 0) is covered by:
-    // compare, multiply, mod, division function 
-    // while d is odd (which is another function in
-
-    int64_t v = 1;
-    int64_t p = base;
-    while (exponent > 0) {
-        if ((exponent % 2) == 1) { // anything with a remiander of one is odd or ((exponent & 1) == 1)
-            v = (v * p) % modulus;
-        }
-        p = (p * p) % modulus;
-        exponent = exponent / 2; //tdiv or fdiv for mpz division.
-        //exponent >>= 1; 
-    }
-    out = v;
-    //return out;
-    printf("out is: %ld\n", out);
-}*/
-
 void pow_mod(mpz_t out, mpz_t base, mpz_t exponent, mpz_t modulus) {
     mpz_t v;
     mpz_t p;
-    mpz_t e;
-    mpz_t vp;
-    mpz_t pp;
+    mpz_t e; // var to copy exponent
+    mpz_t vp; // var to store (v * p)
+    mpz_t pp; // var to store (p * p)
     mpz_inits(v, p, e, vp, pp, NULL);
-    mpz_set_ui(v , 1);
-    mpz_set(p, out); //mpz_t p <- mpz_t out; // ???
-    mpz_mul(vp, v, p);
-    mpz_mul(pp, p, p);
-    while (mpz_cmp_ui(base, 0) == 1) {
-        if (mpz_odd_p(base) != 0) {
+    mpz_set(e, exponent); // e = exponent
+    mpz_set_ui(v, 1); // v = 1
+    mpz_set(p, base); // set p to the base, p now holds any base val 
+    while (mpz_cmp_ui(e, 0) == 1) {
+        if (mpz_odd_p(e) != 0) {
+	    mpz_mul(vp, v, p);
             mpz_mod(v, vp, modulus); // v = (v * p) % modulus
         }
-        mpz_mod(p, pp, modulus); // p = (p * p) % modulus 
-        mpz_fdiv_q_ui(base, base, 2);
-	mpz_set(exponent, e);
+        mpz_mul(pp, p, p);
+	mpz_mod(p, pp, modulus); // p = (p * p) % modulus 
+        mpz_fdiv_q_ui(e, e, 2);
     }
     mpz_set(out, v);
     mpz_clears(v, p, e, vp, pp, NULL);
+    return;
 }
 
-
-
-/*bool is_prime(int64_t n, int64_t iters) {
-    printf("n = %ld\n", n);
-    if(n == 2) {
-        printf("test 0\n");
-        return true;
-    }
-    if(n % 2 == 1) { // check that n is odd
-        printf("n = %ld\n", n);
-        int64_t n_initial = n - 1; // save n-1 to another variable to use as a check
-        printf("n_initial = %ld\n", n_initial);
-        int64_t n_clone = n; // this is the n-1 variable you can compute with
-        int64_t r;
-        int64_t s;
-        printf("test 1\n");
-        for(s = 0; s <= n_initial ; s++) { // loop - limit at pow(2, s) *n == nminus
-            printf("test 2\n");
-            n_initial = n_clone / 2; // calculate the remainder by dividing by two until the check underneath is satisfied
-            printf("n_inital = %ld\n", n_initial);
-            n_clone = n_initial;
-            printf("n_clone = %ld\n", n_clone);
-            printf("n = %ld\n", n);
-            printf("s = %ld\n", s);
-            if(((2^s * n_initial)  == n_initial) && n_initial % 2 == 1) { // check if the equation is satisfied
-                r = n_initial; // set the remainder
-                printf("s = %ld\n", s);
-                printf("r = %ld\n", r);
-            }
-        }
-        srandom(time(0));
-        for(int64_t i = 1; i <= iters; i ++) {
-            int64_t lower = 2;
-            int64_t upper = n - 2;
-            int64_t a = (random() % (lower - upper + 1)) + lower; // CITE: Eugene section 02_04_2022 & pseduocode collabration w/ tvsharma
-            int64_t y = 0;
-            pow_mod(y, a, r, n);
-            if(y != 1 && y != (n - 1)) {
-                int64_t j = 1;
-                while(j <= (s - 1) && y != (n - 1)) {
-                    pow_mod(y, y, 2, n);
-                    if(y == 1) {
-                        return false;
-                    }
-                    j = j + 1;
-                }
-                if(y != (n - 1)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-    return false;
-}*/
 
 bool is_prime(mpz_t n, uint64_t iters) {
     mpz_t n_clone;
     mpz_t n_1; // var to hold n - 1
+    mpz_t nminusone; 
     mpz_t s;
     mpz_t r;
     mpz_t sminus; // var to hold s - 1 
-    mpz_inits(n_clone, n_1, r, s, sminus, NULL);
+    mpz_inits(n_clone, n_1, nminusone, r, s, sminus, NULL);
     mpz_t a;
     mpz_t y;
     mpz_t j;
-    mpz_t jadd; // var to hold j + 1
     mpz_t upperrange;
     mpz_t two; // var to hold the number 2 
-    mpz_inits(a, y, j, jadd, upperrange, two, NULL);
-    
+    mpz_inits(a, y, j, upperrange, two, NULL);
+
     mpz_set_ui(two, 2);
     mpz_set(n_clone, n); // n_clone = n 
-    mpz_sub_ui(n_1, n, 1); // n_1 = n - 1
-    //gmp_randstate_t state; // sets up a random state 
-    if(mpz_odd_p(n) != 0) {
-        for (mpz_set_ui(s, 0); mpz_even_p(n_clone); mpz_add_ui(s, s, 1)) {
-            mpz_fdiv_q_ui(n_1, n_clone, 2); 
+    mpz_sub_ui(n_1, n, 1); // n_1 = n - 1, changes throughout the code
+    mpz_sub_ui(sminus, s, 1);
+    mpz_sub_ui(nminusone, n, 1); // nminus = n - 1; does not change
+    
+    if (mpz_cmp_ui(n, 0) == 0) {
+	mpz_clears(n_clone, n_1, nminusone, r, s, sminus, NULL);
+        mpz_clears(a, y, j, upperrange, two, NULL);
+        return false;
+    }
+    if (mpz_cmp_ui(n, 1) == 0) {
+        mpz_clears(n_clone, n_1, nminusone, r, s, sminus, NULL);
+	mpz_clears(a, y, j, upperrange, two, NULL);
+        return false;
+    } 
+    if (mpz_cmp_ui(n, 2) == 0) {
+        mpz_clears(n_clone, n_1, nminusone, r, s, sminus, NULL);
+	mpz_clears(a, y, j, upperrange, two, NULL);
+        return true;
+    }
+    if (mpz_cmp_ui(n, 3) == 0) {
+        mpz_clears(n_clone, n_1, nminusone, r, s, sminus, NULL);
+	mpz_clears(a, y, j, upperrange, two, NULL);
+        return true;
+    }
+
+    if (mpz_odd_p(n) != 0) {
+        for (mpz_set_ui(s, 0); mpz_even_p(n_1) != 0; mpz_add_ui(s, s, 1)) {
+	    mpz_fdiv_q_ui(n_1, n_clone, 2); 
             mpz_set(n_clone, n_1);
         }
         mpz_set(r, n_clone);
-        //gmp_randinit_default(state); // srandom(time(0))
-    }
-    for (uint64_t i = 1; i <= iters; i++) {
-	mpz_sub_ui(upperrange, n, 3);
-        mpz_urandomm(a, state, n_1); // choose random a from range {2,..., n - 2)
-        mpz_add_ui(a, a, 2);
-	pow_mod(y, a, r, n);
-        if ((mpz_cmp_ui(y, 1) != 0) && (mpz_cmp(y, n_1) != 0)) {
-	    mpz_set_ui(j, 1);
-	    while ((mpz_cmp(j, sminus) != 1) && (mpz_cmp(y, n_1) != 0)) { // while j <= s-1 & y != n - 1
-	        pow_mod(y, y, two, n);
-		if ((mpz_cmp_ui(y, 1) == 1)) {
-		    mpz_clears(n_clone, n_1, r, s, sminus, NULL);
-		    mpz_clears(a, y, j, jadd, upperrange, two, NULL);
-	            return false;
-		}
-		mpz_add_ui(jadd, j, 1);
+        for (uint64_t i = 1; i <= iters; i++) {
+	    mpz_sub_ui(upperrange, n, 3);
+            mpz_urandomm(a, state, upperrange); // choose random a from range {2,..., n - 2)
+            mpz_add_ui(a, a, 2); // a = a + 2, to start the range at 2
+	    pow_mod(y, a, r, n); // y = power mod(a, r, n)
+            if ((mpz_cmp_ui(y, 1) != 0) && (mpz_cmp(y, nminusone) != 0)) {  
+	        mpz_set_ui(j, 1);
+	        while ((mpz_cmp(j, sminus) != 1) && (mpz_cmp(y, nminusone) != 0)) { // while j <= s-1 & y != n - 1
+		    pow_mod(y, y, two, n);
+		    if ((mpz_cmp_ui(y, 1) == 0)) {
+		        mpz_clears(n_clone, n_1, nminusone, r, s, sminus, NULL);
+		        mpz_clears(a, y, j, upperrange, two, NULL);
+		        return false;
+		    }
+		    mpz_add_ui(j, j, 1);
+	        }
+	        if (mpz_cmp(y, nminusone) != 0) { 
+                    mpz_clears(n_clone, n_1, nminusone, r, s, sminus, NULL);
+		    mpz_clears(a, y, j, upperrange, two, NULL);
+		    return false;
+	        }	
 	    }
-	    if (mpz_cmp(y, n_1) != 0) {
-                mpz_clears(n_clone, n_1, r, s, sminus, NULL);
-		mpz_clears(a, y, j, jadd, upperrange, two, NULL);
-	        return false;
-	    }
-	}
+        }
+        mpz_clears(n_clone, n_1, nminusone, r, s, sminus, NULL);
+        mpz_clears(a, y, j, upperrange, two, NULL);
+        return true;
     }
-    mpz_clears(n_clone, n_1, r, s, sminus, NULL);
-    mpz_clears(a, y, j, jadd, upperrange, two, NULL);
-    return true; 
+    mpz_clears(n_clone, n_1, nminusone, r, s, sminus, NULL);
+    mpz_clears(a, y, j, upperrange, two, NULL);
+    return false;
 }
 
 
-
-/*void make_prime(int64_t p, uint64_t bits, uint64_t iters) {
-    break;
-}*/
-
-/*void make_prime(mpz_t p, uint64_t bits, uint64_t iters) {
-    // generates a new prime number stored in p
-    // the generated prime should be at least bits number or bits long
-}*/
-
-
-
-/*void gcd(int64_t d, int64_t a, int64_t b) {
-    // computed the greatest common divisor of a and b, storing the value in d
-    while (b != 0) { // later change condition to mpz_cmp_ui(b, 0) == false
-        int64_t t = b;
-        b = a % d;
-        a = t; 
+void make_prime(mpz_t p, uint64_t bits, uint64_t iters) {
+    mpz_t var;
+    mpz_t two; 
+    mpz_t var1;
+    mpz_t var2;
+    mpz_inits(var, two, var1, var2, NULL);
+    mpz_set_ui(two, 2);
+    mpz_pow_ui(var, two, bits); // v = 2^bits
+    mpz_set_ui(var1, 0);
+    mpz_set_ui(var2, 0);
+    while(is_prime(var1, iters) == false) {
+        mpz_rrandomb(var2, state, bits);
+        mpz_add(var1, var2, var); // CREDIT: Eugene Section 02_04_2022
     }
-    return a;
-}*/
+    mpz_set(p, var1);
+    mpz_clears(var, two, var1, var2, NULL);
+    return;
+}
+
 
 void gcd( mpz_t d, mpz_t a, mpz_t b) {
     mpz_t t;
@@ -205,32 +153,43 @@ void gcd( mpz_t d, mpz_t a, mpz_t b) {
 }
 
 
-
-/*void mod_inverse(int64_t i, int64_t a, int64_t n) {
-    int64_t r = n;
-    int64_t rprime = a;
-    int64_t t = 0;
-    int64_t tprime = 1;
-    int64_t q;
-    while (rprime != 0) {
-        q = r / rprime;
-	r = rprime;
-	rprime = r - q * rprime;
-        t = tprime;
-        tprime = t - q * tprime;	
-    }
-    if (r > 1) {
-	i = 0; // if there is no inverse, set i to zero
-    }
-    if (t < 0) {
-        t = t + n;
-    }
-    return t;     
-}*/
-
-/*
 void mod_inverse(mpz_t i, mpz_t a, mpz_t n) {
-    // computes the inverse i of a modulo n 
-    // if there is no mod inverse, set i to zero 
-}*/
+    // computes the inverse i of modulo n 
+    mpz_t r;
+    mpz_t r_prime;
+    mpz_t t;
+    mpz_t t_prime;
+    mpz_t q;
+    mpz_t r_clone;
+    mpz_t t_clone;
+    mpz_t t_n;
+    mpz_inits(r, r_prime, t, t_prime, q, r_clone, t_clone, t_n, NULL);
+    mpz_set(r, n);
+    mpz_set(r_prime, a);
+    mpz_set_ui(t, 0);
+    mpz_set_ui(t_prime, 1);
+    while(mpz_cmp_ui(r_prime, 0) != 0) {
+        mpz_fdiv_q(q, r, r_prime);
+        mpz_set(r_clone, r); // start parallel assingment r_clone = r
+        mpz_set(r, r_prime); // r = r_prime
+        mpz_submul(r_clone, q, r_prime); // r_clone = r_clone (r) - q x r_prime
+        mpz_set(r_prime, r_clone); // r_prime = r_clone
+        mpz_set(t_clone, t); // t_clone = t
+        mpz_set(t, t_prime); // t = t_prime
+        mpz_submul(t_clone, q, t_prime); // t_clone = t_clone (t) - q x t_prime
+        mpz_set(t_prime, t_clone); // end parallel assingment t_prime = t_clone
+    }
+    if(mpz_cmp_ui(r, 1) == 1) {
+        mpz_set_ui(i, 0);
+        mpz_clears(r, r_prime, t, t_prime, q, r_clone, t_clone, t_n, NULL);
+        return;
+    }
+    if(mpz_cmp_ui(t, 0) == -1) {
+        mpz_add(t_n, t, n);
+        mpz_set(t, t_n);
+    }
+    mpz_set(i, t);
+    mpz_clears(r, r_prime, t, t_prime, q, r_clone, t_clone, t_n, NULL);
+    return;
+}
 
