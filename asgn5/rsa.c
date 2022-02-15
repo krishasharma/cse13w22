@@ -71,7 +71,7 @@ void rsa_write_pub(mpz_t n, mpz_t e, mpz_t s, char username[], FILE *pbfile) {
     gmp_fprintf(pbfile, "%Zx\n", n);
     gmp_fprintf(pbfile, "%Zx\n", e);
     gmp_fprintf(pbfile, "%Zx\n", s);
-    fprintf(pbfile, "%s\n", username); // ASK ABOUT THIS TMRW IN SECTION
+    gmp_fprintf(pbfile, "%s\n", username); // CITE: Miles 02_15_2022
 }
 
 
@@ -81,7 +81,7 @@ void rsa_read_pub(mpz_t n, mpz_t e, mpz_t s, char username[], FILE *pbfile) {
     gmp_fscanf(pbfile, "%Zx\n", n);
     gmp_fscanf(pbfile, "%Zx\n", e);
     gmp_fscanf(pbfile, "%Zx\n", s);
-    fscanf(pbfile, "%s\n", username);
+    gmp_fscanf(pbfile, "%s\n", username); // CITE: Miles 02_15_2022
 }
 
 
@@ -103,6 +103,7 @@ void rsa_make_priv(mpz_t d, mpz_t e, mpz_t p, mpz_t q) {
 
     mod_inverse(d, e, lcm_pq);
     gmp_printf("d: %Zd", d);
+    mpz_clears(p_minusone, q_minusone, pq_mul, gcd_pq, lcm_pq, gcd_e, NULL);
 } 
 
 
@@ -137,13 +138,19 @@ void rsa_encrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t e) {
     
     mpz_sub_ui(log_n, log_n, 1);
     mpz_fdiv_q_ui(k, log_n, 8);
-    block = (uint64_t *)calloc(k, sizeof(uint64_t)); 
-    block[0] = 1111;
+    block = (uint8_t *)calloc(k, sizeof(uint8_t)); // buffer of a single byte
+    block[0] = 0xFF;
 
     mpz_clears(k, NULL); 
 
-    while (feof(infile)) {
-    
+    while (!feof(infile)) {
+        // read the file using fread
+        // mpz import turn the bytes into number
+        // encrypt use rsa encrypt 
+        // gmp fprintf write block (number) to output    
+	// mpz_import takes the buffer and turns it into a rlly long binary number 
+	// then use rsa_encrypt 
+	// then print out the encrypted value as a hex string using gmp
     }
 } 
 
@@ -155,9 +162,10 @@ void rsa_decrypt(mpz_t m, mpz_t c, mpz_t d, mpz_t n) {
 }
 
 
-/*void rsa_decrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t d) {
+void rsa_decrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t d) {
     // decrypts the contents of infile, writing the decrypted contents to outfile
-} */
+    
+} 
 
 
 void rsa_sign(mpz_t s, mpz_t m, mpz_t d, mpz_t n) {
