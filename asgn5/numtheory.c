@@ -104,7 +104,7 @@ bool is_prime(mpz_t n, uint64_t iters) {
 	    pow_mod(y, a, r, n); // y = power mod(a, r, n)
             if ((mpz_cmp_ui(y, 1) != 0) && (mpz_cmp(y, nminusone) != 0)) {  
 	        mpz_set_ui(j, 1);
-		mpz_sub_ui(sminus, s, 1); // TWISHA 
+		mpz_sub_ui(sminus, s, 1); 
 	        while ((mpz_cmp(j, sminus) != 1) && (mpz_cmp(y, nminusone) != 0)) { // while j <= s-1 & y != n - 1
 		    pow_mod(y, y, two, n);
 		    if ((mpz_cmp_ui(y, 1) == 0)) {
