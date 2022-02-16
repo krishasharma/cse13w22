@@ -69,5 +69,28 @@ int main(int argc, char **argv) {
 
     // print a helpful error and exit the program in the event of failure 
     
-    // using
+    // using fchmod() and fileno(), make sure the private key file permissions are set to 0600, indicating read and write permissions for the user, and no permissions for anyone else 
+
+    // inatilize the random state using randstate_init(), using the set seed 
+
+    // make the public and private keys using rsa_make_pub() and rsa_make_priv(), respectively 
+
+    // get the current user's name as a string, use getenv()
+
+    // convert the username into an mpz_t with mpz_set_str(), specifying the base as 62, then use rsa_sign() to compute the signature of the username 
+
+    // write the computed public and private key into their respective files 
+
+    // if verbose output is enabled, print the following, each with a trailing newline, in order:
+
+        // gmp_printf("username is %s\n", user);
+        // gmp_printf("the signature is: %Zd\n", s);
+        // gmp_printf("the first large prime is: %Zd\n", p);
+        // gmp_printf("the second large prime is: %Zd\n", q);
+        // gmp_printf("the public modulus is: %Zd\n", n);
+        // gmp_printf("the public exponent: %Zd\n", e);
+        // gmp_printf("the private key: %Zd\n", d); 
+
+    // close the public and private key files, clear the random state with randstate_clear(), and clear and mpz_t variables you may have used 
+
 }
