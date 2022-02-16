@@ -1,4 +1,53 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include "randstate.h"
 #include "numtheory.h"
+#include <time.h>
+#include "rsa.h"
+
+// TEST FOR RSA_ENCRYPT_FILE & RSA_DECRYPT_FILE
+
+int main(void) {
+    mpz_t p, q, n, e, d, s, m; mpz_inits(p, q, n, e, d, s, m, NULL);
+    uint64_t nbits = 50, iters = 100;
+    randstate_init(69);
+    rsa_make_pub(p, q, n, e, nbits, iters);
+    rsa_make_priv(d, e, p, q);
+    FILE *file0 = fopen("rsa.pub", "w");
+    char * username = getenv("USER");
+    mpz_set_str(m, username, 62);
+    rsa_sign(s, m, d, n);
+    rsa_write_pub(n, e, s, username, file0);
+    fclose(file0);
+
+    //gmp_printf("%Zd %Zd %Zd %Zd %Zd %d %d\n", p, q, n, e, d, nbits, iters);
+    FILE *infile0 = fopen("rsa.priv", "w");
+    rsa_write_priv(n, d, infile0);
+    fclose(infile0);
+
+    //gmp_printf("%Zd %Zd %Zd %Zd %Zd %d %d\n", p, q, n, e, d, nbits, iters);
+    //gmp_printf("%d %d\n", mpz_sizeinbase(p, 2), mpz_sizeinbase(q, 2));
+    FILE *infile = fopen("input.txt", "r");
+    FILE *outfile = fopen("output.txt", "w");
+    rsa_encrypt_file(infile, outfile, n, e);
+    fclose(outfile);
+    fclose(infile);
+
+
+     FILE *infile2 = fopen("output.txt", "r");
+     FILE *outfile2 = fopen("final.txt", "w");
+     rsa_decrypt_file(infile, outfile, n, d);
+     fclose(infile2);
+     fclose(outfile2);
+     randstate_clear();
+     mpz_clears(p, q, n, e, d, s, m, NULL);
+     return 0;
+}
+
+
+// NUMTHEORY.C TEST and RSA.C TEST 
+
+/*#include "numtheory.h"
 #include "randstate.h"
 #include "rsa.h"
 #include <stdbool.h>
@@ -34,7 +83,7 @@ int main() {
     rsa_verify(m, s, e, n); 
     
     // RSA_SIGN TEST 
-    /*mpz_t s;
+    mpz_t s;
     mpz_t m;
     mpz_t d;
     mpz_t n;
@@ -242,8 +291,8 @@ int main() {
 
     //mpz_clears(s, m, d, n, NULL); // clears for rsa_sign 
     
-    mpz_clears(m, s, e, n, NULL); // clears for rsa_verify 
+    //mpz_clears(m, s, e, n, NULL); // clears for rsa_verify 
 
-    randstate_clear();
+    //randstate_clear();
 
-}
+//}
