@@ -2,7 +2,7 @@ CC = clang
 
 CFLAGS = -Wall -Wextra -Werror -Wpedantic -g $(shell pkg-config --cflags gmp)
 
-HERA =  randstate.o test.o numtheory.o
+HERA =  randstate.o test.o numtheory.o rsa.o
 
 HERMES = --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose
 
