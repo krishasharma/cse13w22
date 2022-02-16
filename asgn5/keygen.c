@@ -10,16 +10,16 @@
 
 // Please Note: 
 // The implemented code is based off of pseudocode provided by the Professor in the assignment PDF
-// There is also high level pseudocode collabration with my sister Twisha Sharma (tvsharma)
-// Audrey is cited in randstate.c as she provided pusedocode for it during her tutoring section 
+// There is also high level pseudocode collaboration with my sister Twisha Sharma (tvsharma)
+// Audrey is cited in randstate.c as she provided pseudocode for it during her tutoring section 
 // on 02_09_2022
-// Eugene is cited in numtheory.c for the pusedocode for the pow_mod and the is_prime functions 
+// Eugene is cited in numtheory.c for the pseudocode for the pow_mod and the is_prime functions 
 // given during his lab section on 02_04_2022
 // Eugene is also cited in numtheory.c make_prime specifically for for the idea of 
 // adding 2^bits + the random num generated from urandomb that caps at user input bits given
 // Omar is cited in numtheory.c for explaining how to implement the mpz functions from the GMP library
 // Brian is cited in rsa.c specifically in rsa_make_pub for explaining how to generate a random number
-// in the range specificed in the asgn_5 PDF 
+// in the range specified in the asgn_5 PDF 
 
 int main(int argc, char **argv) {
     bool k_b = false;
