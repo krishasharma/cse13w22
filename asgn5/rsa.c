@@ -131,17 +131,20 @@ void rsa_encrypt(mpz_t c, mpz_t m, mpz_t e, mpz_t n) {
 
 void rsa_encrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t e) {
     // encrypts the contents of infile, writing the encrypted contents to outfile
-    mpz_t k;
-    mpz_inits(k, NULL);
-    size_t log_n = mpz_sizeinbase(n, 2);
+    mpz_t m;
+    mpz_t encrypted;
+    mpz_inits(m, encrypted, NULL);
 
-    mpz_sub_ui(log_n, log_n, 1);
-    mpz_fdiv_q_ui(k, log_n, 8);
-    block = (uint8_t *)calloc(k, sizeof(uint8_t)); // buffer of a single byte
-    block[0] = 0xFF;
+    size_t log_n = mpz_sizeinbase(n, 2); // sets log_n equal to log2(n)
+    log_n = log_n - 1; 
+    size_t k = log_n / 8;
+    //mpz_sub_ui(log_n, log_n, 1);
+    //mpz_fdiv_q_ui(k, log_n, 8);
 
-    mpz_clears(k, NULL);
-
+    uint8_t *block = (uint8_t *)calloc(k, sizeof(uint8_t)); // buffer of a single byte, allocating the array
+    block[0] = 0xFF 
+    
+    size_t j;
     while (!feof(infile)) {
         // read the file using fread
         // mpz import turn the bytes into number
@@ -150,7 +153,13 @@ void rsa_encrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t e) {
 	// mpz_import takes the buffer and turns it into a rlly long binary number
 	// then use rsa_encrypt
 	// then print out the encrypted value as a hex string using gmp
+        j = fread(&block[1], sizeof(uint8_t), k - 1, infile); 
+	mpz_import(m, j, 1, sizeof(uint8_t), 1, 0, block);
+	rsa_encrypt(encrypted, m, e, n);
+	gmp_fprintf(outfile, "%Zx\n", encrypted);
     }
+
+    mpz_clears(m, encrypted, NULL);
 }
 
 
@@ -161,10 +170,10 @@ void rsa_decrypt(mpz_t m, mpz_t c, mpz_t d, mpz_t n) {
 }
 
 
-void rsa_decrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t d) {
+/*void rsa_decrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t d) {
     // decrypts the contents of infile, writing the decrypted contents to outfile
 
-}
+}*/
 
 
 void rsa_sign(mpz_t s, mpz_t m, mpz_t d, mpz_t n) {
