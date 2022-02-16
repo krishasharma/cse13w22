@@ -170,10 +170,32 @@ void rsa_decrypt(mpz_t m, mpz_t c, mpz_t d, mpz_t n) {
 }
 
 
-/*void rsa_decrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t d) {
+void rsa_decrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t d) {
     // decrypts the contents of infile, writing the decrypted contents to outfile
+    // do the opposite of encrypt_file 
+    mpz_t m;
+    mpz_t decrypted;
+    mpz_inits(m, decrypted, NULL);
 
-}*/
+    size_t log_n = mpz_sizeinbase(n, 2); // sets log_n equal to log2(n)
+    log_n = log_n - 1;
+    size_t k = log_n / 8;
+    //mpz_sub_ui(log_n, log_n, 1);
+    //mpz_fdiv_q_ui(k, log_n, 8);
+
+    uint8_t *block = (uint8_t *)calloc(k, sizeof(uint8_t)); // buffer of a single byte, allocating the array
+    block[0] = 0xFF
+
+    size_t j;
+    while (!feof(infile)) {
+        gmp_fscanf(outfile, "%Zx\n", m);
+	rsa_decrypt(decrypted, m, d, n,);
+	mpz_export(block, &j, 1, sizeof(uint8_t), 1, 0, m);
+	fwrite(block, sizeof(uint8_t), j - 1, outfile);
+    }
+
+    mpz_clears(m, decrypted, NULL);
+}
 
 
 void rsa_sign(mpz_t s, mpz_t m, mpz_t d, mpz_t n) {
