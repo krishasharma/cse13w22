@@ -10,16 +10,18 @@
 
 // Please Note: 
 // The implemented code is based off of pseudocode provided by the Professor in the assignment PDF
-// There is also high level pseudocode collabration with my sister Twisha Sharma (tvsharma)
+// There is also high level pseudocode collaboration with my sister Twisha Sharma (tvsharma)
 // Audrey is cited in randstate.c as she provided pusedocode for it during her tutoring section 
 // on 02_09_2022
 // Eugene is cited in numtheory.c for the pusedocode for the pow_mod and the is_prime functions 
 // given during his lab section on 02_04_2022
 // Eugene is also cited in numtheory.c make_prime specifically for for the idea of 
 // adding 2^bits + the random num generated from urandomb that caps at user input bits given
+// Eugene is once again cited in keygen.c for explaining how to properly implement fchmod() and fileno() 
+// in keygen.c during his office hours on 02_16_2022
 // Omar is cited in numtheory.c for explaining how to implement the mpz functions from the GMP library
 // Brian is cited in rsa.c specifically in rsa_make_pub for explaining how to generate a random number
-// in the range specificed in the asgn_5 PDF 
+// in the range specified in the asgn_5 PDF 
 
 void rsa_make_pub(mpz_t p, mpz_t q, mpz_t n, mpz_t e, uint64_t nbits, uint64_t iters) {
     // creates parts of a new RSA public key
@@ -53,9 +55,9 @@ void rsa_make_pub(mpz_t p, mpz_t q, mpz_t n, mpz_t e, uint64_t nbits, uint64_t i
 	gcd(gcd_e, e, lcm_pq); // compute the gcd of each random num and lambda(n)
     }
 
-    printf("nibits = %lu\n", nbits);
-    printf("pbits = %lu\n", pbits);
-    printf("qbits = %lu\n", qbits);
+    //printf("nibits = %lu\n", nbits); // TEST PRINT STATEMENT 
+    //printf("pbits = %lu\n", pbits); // TEST PRINT STATEMENT
+    //printf("qbits = %lu\n", qbits); // TEST PRINT STATEMENT
 
     mpz_clears(p_minusone, q_minusone, pq_mul, gcd_pq, lcm_pq, gcd_e, NULL);
     return;
@@ -101,8 +103,8 @@ void rsa_make_priv(mpz_t d, mpz_t e, mpz_t p, mpz_t q) {
     mpz_fdiv_q(lcm_pq, pq_mul, gcd_pq); // abs((p - 1) * (q - 1)/ gcd((p - 1) * (q - 1)
 
     mod_inverse(d, e, lcm_pq);
-    gmp_printf("d: %Zd", d);
-    mpz_clears(p_minusone, q_minusone, pq_mul, gcd_pq, lcm_pq, gcd_e, NULL);
+    //gmp_printf("d: %Zd", d); // TEST PRINT STATEMENT 
+    mpz_clears(p_minusone, q_minusone, pq_mul, gcd_pq, lcm_pq, NULL);
 }
 
 
@@ -142,9 +144,9 @@ void rsa_encrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t e) {
     //mpz_fdiv_q_ui(k, log_n, 8);
 
     uint8_t *block = (uint8_t *)calloc(k, sizeof(uint8_t)); // buffer of a single byte, allocating the array
-    block[0] = 0xFF 
+    block[0] = 0xFF; 
     
-    size_t j;
+    size_t j = 0;
     while (!feof(infile)) {
         // read the file using fread
         // mpz import turn the bytes into number
@@ -154,12 +156,13 @@ void rsa_encrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t e) {
 	// then use rsa_encrypt
 	// then print out the encrypted value as a hex string using gmp
         j = fread(&block[1], sizeof(uint8_t), k - 1, infile); 
-	mpz_import(m, j, 1, sizeof(uint8_t), 1, 0, block);
+	mpz_import(m, j + 1, 1, sizeof(uint8_t), 1, 0, block);
 	rsa_encrypt(encrypted, m, e, n);
 	gmp_fprintf(outfile, "%Zx\n", encrypted);
     }
 
     mpz_clears(m, encrypted, NULL);
+    free(block);
 }
 
 
@@ -184,17 +187,18 @@ void rsa_decrypt_file(FILE *infile, FILE *outfile, mpz_t n, mpz_t d) {
     //mpz_fdiv_q_ui(k, log_n, 8);
 
     uint8_t *block = (uint8_t *)calloc(k, sizeof(uint8_t)); // buffer of a single byte, allocating the array
-    block[0] = 0xFF
+    block[0] = 0xFF;
 
     size_t j;
     while (!feof(infile)) {
-        gmp_fscanf(outfile, "%Zx\n", m);
-	rsa_decrypt(decrypted, m, d, n,);
-	mpz_export(block, &j, 1, sizeof(uint8_t), 1, 0, m);
-	fwrite(block, sizeof(uint8_t), j - 1, outfile);
+        gmp_fscanf(infile, "%Zx\n", m);
+	rsa_decrypt(decrypted, m, d, n);
+	mpz_export(block, &j, 1, sizeof(uint8_t), 1, 0, decrypted);
+	fwrite(&block[1], sizeof(uint8_t), j - 1, outfile);
     }
 
     mpz_clears(m, decrypted, NULL);
+    free(block);
 }
 
 
@@ -213,15 +217,15 @@ bool rsa_verify(mpz_t m, mpz_t s, mpz_t e, mpz_t n) {
     mpz_init(t);
 
     pow_mod(t, s, e, n);
-    gmp_printf("t: %Zd\n", t);
 
     if(mpz_cmp(t, m) == 0) {
-        return true;
+        mpz_clears(t, NULL);
+	return true;
     }
     else {
-        return false;
+        mpz_clears(t, NULL);
+	return false;
     }
-
     mpz_clears(t, NULL);
 }
 
