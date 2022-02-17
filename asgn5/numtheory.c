@@ -15,6 +15,8 @@
 // given during his lab section on 02_04_2022
 // Eugene is also cited in numtheory.c make_prime specifically for for the idea of 
 // adding 2^bits + the random num generated from urandomb that caps at user input bits given
+// Eugene is once again cited in keygen.c for explaining how to properly implement fchmod() and fileno()
+// in keygen.c during his office hours on 02_16_2022
 // Omar is cited in numtheory.c for explaining how to implement the mpz functions from the GMP library
 // Brian is cited in rsa.c specifically in rsa_make_pub for explaining how to generate a random number
 // in the range specified in the asgn_5 PDF 
