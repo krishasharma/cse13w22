@@ -62,13 +62,11 @@ int main(int argc, char **argv) {
             o = true;
             outfile = optarg; // Set outfile if specified
             break;
-        case 'v':
-            v = true;
-            break;
+        case 'v': v = true; break;
         }
     }
 
-    uint64_t *histo (uint64_t *) calloc(ALPHABET, sizeof(uint64_t));
+    uint64_t *histo(uint64_t *) calloc(ALPHABET, sizeof(uint64_t));
 
     int spc_symb_index = 0;
     if (!i) {
@@ -78,6 +76,5 @@ int main(int argc, char **argv) {
     if (spc_symb_index != 256 && histo[spc_symb_index] != 0) {
         spc_symb_index += 1;
     }
-    uint64_t histo[ALPHABET] = {spc_symb_index};
-
+    uint64_t histo[ALPHABET] = { spc_symb_index };
 }
