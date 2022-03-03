@@ -10,16 +10,16 @@
 #include <stddef.h>
 
 // Please Note: The implemented code is based off of pseudocode provided by the Professor in the assignment PDF
-// There is also high level pseudocode collaboration with my sister Twisha Sharma (tvsharm) 
-// Eugene is cited throughout the asgn for his explanation during his lab section on 02_18_2022. 
-// Eugene explained how to set up the assignment for huffman coding as well as explained how to properly begin 
+// There is also high level pseudocode collaboration with my sister Twisha Sharma (tvsharm)
+// Eugene is cited throughout the asgn for his explanation during his lab section on 02_18_2022.
+// Eugene explained how to set up the assignment for huffman coding as well as explained how to properly begin
 // each step of the assignment.
-// Audrey is cited for her tutoring session on 02_25_2022 when she helped look over my huffman.c and node.c. 
+// Audrey is cited for her tutoring session on 02_25_2022 when she helped look over my huffman.c and node.c.
 // Audrey also helped me fix syntax error in stack.c during her tutoring session on 03_02_2022
 // She specifically helped me with stack_pop()
 // Ben is cited for helping me with read_bytes and write_bytes during his tutoring session on 03_01_2022
 // During his tutoring session he explained how to best implement read_bytes. Ben also looked over my code.c
-// Brian is cited for his section on 02_28_2022 when he helped look over my pq.c 
+// Brian is cited for his section on 02_28_2022 when he helped look over my pq.c
 // Brian helped to also explain how to proceed with code.c and the best way to go about implementing the functions
 // Brian also helped me during his tutoring session on 03_02_2022 by looking over my io.c file and helping me
 // fix compilation and syntax errors
@@ -54,12 +54,12 @@ void stack_delete(Stack **s) {
 }
 
 bool stack_empty(Stack *s) {
-    // Returns true if the stack is empty and false otherwise. 
+    // Returns true if the stack is empty and false otherwise.
     return s->top == 0;
 }
 
 bool stack_full(Stack *s) {
-    // Returns true if the stack is full and false otherwise. 
+    // Returns true if the stack is full and false otherwise.
     return s->top == s->capacity;
 }
 
@@ -89,10 +89,10 @@ bool stack_pop(Stack *s, Node **n) {
     }
     s->top -= 1;
     *n = s->items[s->top];
-    return true; 
+    return true;
 }
 
 void stack_print(Stack *s) {
     // A debug function to print the contents of a stack.
     printf("IGNORE: %u", s->top);
-} 
+}
