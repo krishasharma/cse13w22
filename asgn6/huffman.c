@@ -37,17 +37,17 @@ Node *build_tree(uint64_t hist[static ALPHABET]) {
     int index = 0;
     for (index = 0; index <= 256; index += 1) {
         if (hist[index] != 0) {
-	    Node *child = node_create(index, hist[index]);
-	    enqueue(pq, child);
-	}
+            Node *child = node_create(index, hist[index]);
+            enqueue(pq, child);
+        }
     }
     while (pq_size(pq) > 1) {
         Node *leftdequeue;
-	dequeue(pq, &leftdequeue);
-	Node *rightdequeue;
-	dequeue(pq, &rightdequeue);
-	Node *parent = node_join(leftdequeue, rightdequeue);
-	enqueue(pq, parent);
+        dequeue(pq, &leftdequeue);
+        Node *rightdequeue;
+        dequeue(pq, &rightdequeue);
+        Node *parent = node_join(leftdequeue, rightdequeue);
+        enqueue(pq, parent);
     }
     Node *root;
     dequeue(pq, &root);
@@ -56,27 +56,26 @@ Node *build_tree(uint64_t hist[static ALPHABET]) {
 
 void build_codes(Node *root, Code table[static ALPHABET]) {
     // Populates a code table, building the code for each symbol in the Huffman tree.
-    // The constructed codes are copied to the code table, table, which has ALPHABET indices. 
+    // The constructed codes are copied to the code table, table, which has ALPHABET indices.
     // It has one index for each possible symbol.
     if (root != NULL) {
         Code *code = NULL;
-	uint8_t *x = NULL;
-	if (!root->left) {
-	    if (!root->right) {
-	        code = &table[root->symbol]; 
-	    }
-	}
-	else {
-	    if (root->left) {
-	        code_push_bit(code, 0);
-	        build_codes(root->left, &table[0]);
-	        code_pop_bit(code, x);
-	    }
-	    if (root->right) {
-	        code_push_bit(code, 1);
-	        build_codes(root->right, &table[1]);
-	        code_pop_bit(code, x);
-	    }
+        uint8_t *x = NULL;
+        if (!root->left) {
+            if (!root->right) {
+                code = &table[root->symbol];
+            }
+        } else {
+            if (root->left) {
+                code_push_bit(code, 0);
+                build_codes(root->left, &table[0]);
+                code_pop_bit(code, x);
+            }
+            if (root->right) {
+                code_push_bit(code, 1);
+                build_codes(root->right, &table[1]);
+                code_pop_bit(code, x);
+            }
         }
     }
 }
@@ -89,40 +88,40 @@ void dump_tree(int outfile, Node *root) {
     uint8_t I = 'I';
     if (root) {
         dump_tree(outfile, root->left);
-	dump_tree(outfile, root->right);
-	if (!root->left && !root->right) {
-	    write_bytes(outfile, &L, 1); 
-	    write_bytes(outfile, &root->symbol, 1);
-	}
-	else {
+        dump_tree(outfile, root->right);
+        if (!root->left && !root->right) {
+            write_bytes(outfile, &L, 1);
+            write_bytes(outfile, &root->symbol, 1);
+        } else {
             write_bytes(outfile, &I, 1);
-	}	
+        }
     }
 }
 
 Node *rebuild_tree(uint16_t nbytes, uint8_t tree[static nbytes]) {
     // Reconstructs a Huffman tree given its post-order tree dump stored in the array tree_dump.
-    // The length in bytes of tree_dump is given by nbytes. 
+    // The length in bytes of tree_dump is given by nbytes.
     // Returns the root node of the reconstructed tree.
     Stack *stack = stack_create(nbytes);
     uint8_t L = 'L';
     uint8_t I = 'I';
     for (int i = 0; i < nbytes; i += 1) { // you need to also be incrementing i somewhere else???
         if (tree[i] == L) {
-	    nbytes -= 1;
-	    Node *child = node_create(tree[i + 1], 0); // i + 1 becasue the symbol will come after L in the encoded output
-	    stack_push(stack, child);
-	}
-	if (tree[i] == I) {
-	    // CITE: Audrey's tutoring session on 03_02_2022
-	    // pop the right and left child from the stack instead of creating entirely new nodes. 
-	    Node *lchild;
-	    stack_pop(stack, &lchild);
+            nbytes -= 1;
+            Node *child = node_create(
+                tree[i + 1], 0); // i + 1 becasue the symbol will come after L in the encoded output
+            stack_push(stack, child);
+        }
+        if (tree[i] == I) {
+            // CITE: Audrey's tutoring session on 03_02_2022
+            // pop the right and left child from the stack instead of creating entirely new nodes.
+            Node *lchild;
+            stack_pop(stack, &lchild);
             Node *rchild;
-	    stack_pop(stack, &rchild);
-	    Node *parent = node_join(lchild, rchild); 
-	    stack_push(stack, parent);
-	}
+            stack_pop(stack, &rchild);
+            Node *parent = node_join(lchild, rchild);
+            stack_push(stack, parent);
+        }
     }
     Node *root;
     stack_pop(stack, &root);
@@ -135,9 +134,8 @@ void delete_tree(Node **root) {
     // Remember to set the pointer to NULL after you are finished freeing all the allocated memory.
     if (*root) {
         delete_tree((&(*root)->left));
-	delete_tree((&(*root)->right));
+        delete_tree((&(*root)->right));
     }
     free(*root);
     *root = NULL;
 }
-
