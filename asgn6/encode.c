@@ -36,13 +36,13 @@ int main(int argc, char **argv) {
     bool v = false;
     FILE *infile = stdin; // Default file is stdin
     FILE *outfile = stdout; // Default file is stdout
-    
+
     while ((opt = getopt(argc, argv, "hi:o:v")) != -1) {
         switch (opt) {
         case 'h':
             h = true;
-	    // CREDIT: resources repo refrence program 
-            printf("SYNOPSIS\n"); 
+            // CREDIT: resources repo refrence program
+            printf("SYNOPSIS\n");
             printf("   A Huffman encoder.\n");
             printf("   Compresses a file using the Huffman coding algorithm.\n");
             printf("USAGE\n");
@@ -62,13 +62,11 @@ int main(int argc, char **argv) {
             o = true;
             outfile = optarg; // Set outfile if specified
             break;
-        case 'v':
-            v = true;
-            break;
+        case 'v': v = true; break;
         }
     }
-    
-    uint64_t *histo (uint64_t *) calloc(ALPHABET, sizeof(uint64_t));
+
+    uint64_t *histo(uint64_t *) calloc(ALPHABET, sizeof(uint64_t));
 
     int spc_symb_index = 0;
     if (!i) {
@@ -78,7 +76,5 @@ int main(int argc, char **argv) {
     if (spc_symb_index != 256 && histo[spc_symb_index] != 0) {
         spc_symb_index += 1;
     }
-    uint64_t histo[ALPHABET] = {spc_symb_index};
-
+    uint64_t histo[ALPHABET] = { spc_symb_index };
 }
-
