@@ -11,13 +11,13 @@
 #include "speck.h"
 #include "metric.h"
 
-// Please Note: Professor Long is cited throughout this assignment for providing the pseudocode in the assignment7 PDF document. 
+// Please Note: Professor Long is cited throughout this assignment for providing the pseudocode in the assignment7 PDF document.
 // Professor Long is also cited for the help he gave as Walter Sobchack (Elmer) on discord in the CSE13s - Winter2022 - Professor Long server.
 // Throughout this assignment, I had high-level pseudocode collaboration with my sister Twisha Sharma (tvsharma)
-// Eugene is cited throughout this assignment for this help with explaining how to properly begin and correctly implement this assignment 
+// Eugene is cited throughout this assignment for this help with explaining how to properly begin and correctly implement this assignment
 // during his section on 03_04_2022
 // Ben is cited for his tutoring session on 03_08_2022
-// during it he helped me understand that to access the salt array we should treat it as a pointer because we want to access the whole 
+// during it he helped me understand that to access the salt array we should treat it as a pointer because we want to access the whole
 // array, not a specific part of the array.
 // Audrey is cited for her tutoring session on 03_09_2022
 // during it she helped me understand how to properly delete the hash table as my destructor function was running errors.
@@ -49,10 +49,13 @@ int main(int argc, char **argv) {
             printf("   ./identify [-h] \n");
             printf("OPTIONS\n");
             printf("   -h             Program usage and help.\n");
-            printf("   -d             Specify path to database of author and text. The default is lib.txt\n");
-            printf("   -n             Specify path to file of noise words to filter out. The default is noise.txt\n");
+            printf("   -d             Specify path to database of author and text. The default is "
+                   "lib.txt\n");
+            printf("   -n             Specify path to file of noise words to filter out. The "
+                   "default is noise.txt\n");
             printf("   -k             Specify the number of matches. The default is 5\n");
-            printf("   -l             Specify the number of noise word to filter out. The default is 100..\n");
+            printf("   -l             Specify the number of noise word to filter out. The default "
+                   "is 100..\n");
             printf("   -e             Set the distance metric to use as the Euclidean distance.\n");
             printf("   -m             Set the distance metric to use as the Manhattan distance.\n");
             printf("   -c             Set the distance metric to use as the Cosine distance.\n");
@@ -60,30 +63,26 @@ int main(int argc, char **argv) {
             break;
         case 'd':
             d = true;
-            authorfile = optarg  // Set author if specified
-            break;
+            authorfile = optarg // Set author if specified
+                break;
         case 'n':
             n = true;
             noisefile = optarg; // Set noise if specified
             break;
         case 'k':
             k = true;
-            matches = optarg; // Set the matches if specified 
+            matches = optarg; // Set the matches if specified
             break;
         case 'l':
             l = true;
             filterwordcount = optarg; // Set the number of noise words to filter out
             break;
-        case 'e':
-            e = true;
-            break;
+        case 'e': e = true; break;
         case 'm':
             m = true;
             metric = MANHATTAN; // Set the metric to Manhattan
             break;
-        case 'c':
-            c = true;
-            metric = COSINE // Set the metric to cosine
+        case 'c': c = true; metric = COSINE // Set the metric to cosine
         }
     }
 

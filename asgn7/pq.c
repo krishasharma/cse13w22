@@ -30,8 +30,7 @@ PriorityQueue *pq_create(uint32_t capacity) {
     PriorityQueue *q = (PriorityQueue *) malloc(sizeof(PriorityQueue));
     if (q == NULL) {
         return NULL;
-    }
-    else {
+    } else {
         q->head = 0;
         q->tail = 0;
         q->capacity = capacity;
@@ -81,28 +80,28 @@ uint32_t pq_size(PriorityQueue *q) {
 bool enqueue(PriorityQueue *q, char *author, double dist) {
     //
     if (q) {
-         if (pq_full(q)) {
-             return false;
-         }
-         q->author[q->head] = author;
-         q->distance[q->head] = dist;
-         uint32_t queuesize = pq_size(q);
-         if (queuesize == 0) {
-             q->head = q->head + 1;
-             return true;
-         }
-         for (uint32_t i = pq_size(q); i > 0; i --) {
-             if (q->distance[i] < q->distance[i - 1]) {
-                 double tempdistance = q->distance[i];
-                 q->distance[i] = q->distance[i - 1];
-                 q->distance[i - 1] = tempdistance;
-                 char *tempstring = q->author[i];
-                 q->author[i] = q->author[i - 1];
-                 q->author[i - 1] = tempstring;
-             }
-         }
-         q->head = q->head + 1; // parenthesis (q->head + 1)
-         return true;
+        if (pq_full(q)) {
+            return false;
+        }
+        q->author[q->head] = author;
+        q->distance[q->head] = dist;
+        uint32_t queuesize = pq_size(q);
+        if (queuesize == 0) {
+            q->head = q->head + 1;
+            return true;
+        }
+        for (uint32_t i = pq_size(q); i > 0; i--) {
+            if (q->distance[i] < q->distance[i - 1]) {
+                double tempdistance = q->distance[i];
+                q->distance[i] = q->distance[i - 1];
+                q->distance[i - 1] = tempdistance;
+                char *tempstring = q->author[i];
+                q->author[i] = q->author[i - 1];
+                q->author[i - 1] = tempstring;
+            }
+        }
+        q->head = q->head + 1; // parenthesis (q->head + 1)
+        return true;
     }
     return false;
 }
@@ -116,7 +115,7 @@ bool dequeue(PriorityQueue *q, char **author, double *dist) {
         *author = q->author[q->tail];
         *dist = q->distance[q->tail];
         uint32_t queuesize = pq_size(q);
-        for (uint32_t i = 1; i < queuesize; i ++) {
+        for (uint32_t i = 1; i < queuesize; i++) {
             q->distance[i - 1] = q->distance[1];
             q->author[i - 1] = q->author[i];
         }

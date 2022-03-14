@@ -11,13 +11,13 @@
 #include "bv.h"
 #include "bf.h"
 
-// Please Note: Professor Long is cited throughout this assignment for providing the pseudocode in the assignment7 PDF document. 
+// Please Note: Professor Long is cited throughout this assignment for providing the pseudocode in the assignment7 PDF document.
 // Professor Long is also cited for the help he gave as Walter Sobchack (Elmer) on discord in the CSE13s - Winter2022 - Professor Long server.
 // Throughout this assignment, I had high-level pseudocode collaboration with my sister Twisha Sharma (tvsharma)
-// Eugene is cited throughout this assignment for this help with explaining how to properly begin and correctly implement this assignment 
+// Eugene is cited throughout this assignment for this help with explaining how to properly begin and correctly implement this assignment
 // during his section on 03_04_2022
 // Ben is cited for his tutoring session on 03_08_2022
-// during it he helped me understand that to access the salt array we should treat it as a pointer because we want to access the whole 
+// during it he helped me understand that to access the salt array we should treat it as a pointer because we want to access the whole
 // array, not a specific part of the array.
 // Audrey is cited for her tutoring session on 03_09_2022
 // during it she helped me understand how to properly delete the hash table as my destructor function was running errors.
@@ -30,18 +30,18 @@ struct BloomFilter {
 };
 
 BloomFilter *bf_create(uint32_t size) {
-    // The constructor for a Bloom filter. 
-    // The primary, secondary, and tertiary salts that should be used are provided in salts.h. 
+    // The constructor for a Bloom filter.
+    // The primary, secondary, and tertiary salts that should be used are provided in salts.h.
     BloomFilter *bf
         = (BloomFilter *) malloc(sizeof(BloomFilter)); // allocate memory for the bloom filter
-    if (bf == NULL) { // if memory could not be allocated for the bloom filter 
+    if (bf == NULL) { // if memory could not be allocated for the bloom filter
         return NULL; // return NULL
     }
     BitVector *filter = bv_create(size); // create a bit vector
     if (filter == NULL) { // if the bit vector equals NULL
         free(bf); // free the bloom filter
         bf = NULL; // set the bloom filter equal to NULL
-        return NULL; 
+        return NULL;
     }
     bf->filter = filter;
     bf->primary[0] = SALT_PRIMARY_LO;
@@ -86,13 +86,13 @@ bool bf_probe(BloomFilter *bf, char *word) {
     index2 = index2 % bf_size(bf); // mod by the size of the bloom filter
     uint32_t index3 = hash(bf->tertiary, word); // hash the word with the tertiary salt
     index3 = index3 % bf_size(bf); // mod by the size of the bloom filter
-    if (bv_get_bit(bf->filter, ind1) == true) { // if the value of the bit at index1 is 1
+    if (bv_get_bit(bf->filter, index1) == true) { // if the value of the bit at index1 is 1
         count += 1;
     }
-    if (bv_get_bit(bf->filter, ind2) == true) { // if the value of the bit at index2 is 1
+    if (bv_get_bit(bf->filter, index2) == true) { // if the value of the bit at index2 is 1
         count += 1;
     }
-    if (bv_get_bit(bf->filter, ind3) == true) { // if the value of the bit at index3 is 1
+    if (bv_get_bit(bf->filter, index3) == true) { // if the value of the bit at index3 is 1
         count += 1;
     }
     if (count == 3) {

@@ -10,13 +10,13 @@
 #include "speck.h"
 #include "bv.h"
 
-// Please Note: Professor Long is cited throughout this assignment for providing the pseudocode in the assignment7 PDF document. 
+// Please Note: Professor Long is cited throughout this assignment for providing the pseudocode in the assignment7 PDF document.
 // Professor Long is also cited for the help he gave as Walter Sobchack (Elmer) on discord in the CSE13s - Winter2022 - Professor Long server.
 // Throughout this assignment, I had high-level pseudocode collaboration with my sister Twisha Sharma (tvsharma)
-// Eugene is cited throughout this assignment for this help with explaining how to properly begin and correctly implement this assignment 
+// Eugene is cited throughout this assignment for this help with explaining how to properly begin and correctly implement this assignment
 // during his section on 03_04_2022
 // Ben is cited for his tutoring session on 03_08_2022
-// during it he helped me understand that to access the salt array we should treat it as a pointer because we want to access the whole 
+// during it he helped me understand that to access the salt array we should treat it as a pointer because we want to access the whole
 // array, not a specific part of the array.
 // Audrey is cited for her tutoring session on 03_09_2022
 // during it she helped me understand how to properly delete the hash table as my destructor function was running errors.
@@ -75,7 +75,7 @@ bool bv_set_bit(BitVector *bv, uint32_t i) {
 bool bv_clr_bit(BitVector *bv, uint32_t i) {
     // Clears the i th bit in the bit vector.
     // If i is out of range, return false.
-    // Otherwise, return true to indicate success. 
+    // Otherwise, return true to indicate success.
     if (i > (bv->length) || i < 0) {
         return false;
     } else {
@@ -98,7 +98,7 @@ bool bv_get_bit(BitVector *bv, uint32_t i) {
 }
 
 void bv_print(BitVector *bv) {
-    // A debug function to print the bits of a bit vector. 
+    // A debug function to print the bits of a bit vector.
     uint32_t currentbyte = 0;
     for (currentbyte = 0; currentbyte < bv_length(bv); currentbyte += 1) {
         if (bv_get_bit(bv, currentbyte) == true) {
